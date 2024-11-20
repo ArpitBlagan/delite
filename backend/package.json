@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "tsc && node dist/index.js"
+    "dev": "tsc && node dist/index.js",
+    "email": "tsc && node dist/emailcheck.js"
   },
   "keywords": [],
   "author": "",

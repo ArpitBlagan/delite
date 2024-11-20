@@ -3,7 +3,11 @@ import dotenv from "dotenv";
 import { router } from "./route";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import mongoose from "mongoose";
 dotenv.config();
+mongoose.connect(process.env.DATABASE_URL as string).then(() => {
+  console.log("connected");
+});
 const app = express();
 app.use(
   cors({
@@ -14,7 +18,7 @@ app.use(
 app.use(cookieParser());
 app.use(express.json());
 
-app.use(router);
+app.use("/api", router);
 app.listen(process.env.PORT, () => {
   console.log(`server listening on port ${process.env.PORT}`);
 });
