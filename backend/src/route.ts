@@ -93,14 +93,24 @@ router.route("/signin").post(async (req: Request, res: Response) => {
           const token = jwt.sign(
             {
               user: {
+                first_name: user.first_name,
+                last_name: user.last_name,
                 email: user.email,
                 id: user._id,
               },
             },
             "sadfae@@"
           );
-          res.cookie("jwt", token, { sameSite: "none" });
-          res.status(200).json({ message: "user logged in successfully" });
+          console.log("token", token);
+          res.cookie("token", token, {
+            sameSite: "none",
+            httpOnly: true,
+          });
+          res.status(200).json({
+            first_name: user.first_name,
+            last_name: user.last_name,
+            email: user.email,
+          });
         } else {
           res
             .status(400)
@@ -118,4 +128,8 @@ router.route("/signin").post(async (req: Request, res: Response) => {
   } catch (err) {
     res.status(500).json({ message: "something went wrong" });
   }
+});
+router.route("/logout").get(async (req: Request, res: Response) => {
+  res.cookie("token", "", { sameSite: "none", httpOnly: true, secure: true });
+  res.status(200).json({ message: "logged out successfully" });
 });

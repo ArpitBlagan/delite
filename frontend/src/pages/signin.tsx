@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import * as z from "zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { RiEyeCloseFill, RiEyeFill } from "@remixicon/react";
 const signinSchema = z.object({
   email: z.string().email("Please provide valid registered email address"),
   password: z.string().min(6, "Password should be atleast 6 characters long"),
@@ -15,6 +16,7 @@ type signin = z.infer<typeof signinSchema>;
 
 const Signin = () => {
   const navigate = useNavigate();
+  const [show, setShow] = useState(false);
   const {
     register,
     handleSubmit,
@@ -24,7 +26,11 @@ const Signin = () => {
   const onSubmit: SubmitHandler<signin> = async (data) => {
     setLoading(true);
     try {
-      const res = await axios.post(backendUrl + "/api/signin", { ...data });
+      const res = await axios.post(
+        backendUrl + "/api/signin",
+        { ...data },
+        { withCredentials: true }
+      );
       toast.success("sign in successfully");
       navigate("/home", {
         state: {
@@ -58,11 +64,33 @@ const Signin = () => {
           {errors.email && (
             <span className="text-red-500">{errors.email.message}</span>
           )}
-          <input
-            {...register("password")}
-            placeholder="123456"
-            className="w-full pl-3 h-[50px] border-b "
-          />
+
+          <div style={{ position: "relative" }}>
+            <input
+              type={show ? "text" : "password"}
+              {...register("password")}
+              placeholder="123456"
+              className="w-full pl-3 h-[50px] border-b "
+            />
+            <button
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                setShow(!show);
+              }}
+              style={{
+                position: "absolute",
+                right: "0.5rem",
+                top: "50%",
+                transform: "translateY(-50%)",
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+              }}
+            >
+              {show ? <RiEyeCloseFill /> : <RiEyeFill />}
+            </button>
+          </div>
           {errors.password && (
             <span className="text-red-500">{errors.password.message}</span>
           )}

@@ -1,10 +1,26 @@
-import { useEffect } from "react";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { backendUrl } from "../contant";
+import { toast } from "sonner";
 
 const Home = () => {
   const location = useLocation();
-
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const handleLogout = async () => {
+    setLoading(true);
+    toast("Logging use out...");
+    try {
+      await axios.get(backendUrl + "/api/logout", { withCredentials: true });
+      toast("Log out successfully");
+      navigate("/signin");
+    } catch (err) {
+      toast.error("Not able to log you out right now");
+    } finally {
+      setLoading(false);
+    }
+  };
   useEffect(() => {
     if (!location.state) {
       navigate("/");
@@ -22,7 +38,13 @@ const Home = () => {
       <div className="flex flex-col h-screen">
         <div className="bg-purple-900 h-[50px] flex items-center justify-between px-5">
           <p className="font-semibold text-2xl text-white">Dashboard</p>
-          <button className="bg-white text-purple-900 py-2 px-4 rounded-xl font-medium">
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              handleLogout();
+            }}
+            className="bg-white text-purple-900 py-2 px-4 rounded-xl font-medium"
+          >
             Sign Out
           </button>
         </div>

@@ -108,12 +108,23 @@ exports.router.route("/signin").post((req, res) => __awaiter(void 0, void 0, voi
                 if (ok) {
                     const token = jsonwebtoken_1.default.sign({
                         user: {
+                            first_name: user.first_name,
+                            last_name: user.last_name,
                             email: user.email,
                             id: user._id,
                         },
                     }, "sadfae@@");
-                    res.cookie("jwt", token, { sameSite: "none" });
-                    res.status(200).json({ message: "user logged in successfully" });
+                    console.log("token", token);
+                    res.cookie("token", token, {
+                        sameSite: "none",
+                        httpOnly: true,
+                        secure: true,
+                    });
+                    res.status(200).json({
+                        first_name: user.first_name,
+                        last_name: user.last_name,
+                        email: user.email,
+                    });
                 }
                 else {
                     res
@@ -134,4 +145,8 @@ exports.router.route("/signin").post((req, res) => __awaiter(void 0, void 0, voi
     catch (err) {
         res.status(500).json({ message: "something went wrong" });
     }
+}));
+exports.router.route("/logout").get((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    res.cookie("token", "", { sameSite: "none", httpOnly: true, secure: true });
+    res.status(200).json({ message: "logged out successfully" });
 }));

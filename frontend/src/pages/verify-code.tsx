@@ -11,7 +11,7 @@ const Verifycode = () => {
   const handleSubmit = async () => {
     setLoading(true);
     try {
-      await axios.post(backendUrl + "/api/verify/code", { email, code });
+      await axios.post(backendUrl + "/api/verify/email", { email, code });
       toast.success("Email got verified successfully.");
     } catch (err) {
       toast.error(
@@ -27,7 +27,7 @@ const Verifycode = () => {
         <div className="mb-4">
           <p className="text-center font-bold text-3xl">Verify code</p>
         </div>
-        <form className="flex flex-col gap-4 w-full" onSubmit={handleSubmit}>
+        <form className="flex flex-col gap-4 w-full">
           <input
             value={email}
             onChange={(e) => {
@@ -46,7 +46,10 @@ const Verifycode = () => {
           />
           <button
             disabled={loading}
-            type="submit"
+            onClick={(e) => {
+              e.preventDefault();
+              handleSubmit();
+            }}
             className="w-full py-2 px-4 font-semibold bg-purple-900 text-white rounded-xl mt-2"
           >
             {loading ? "Verifying" : "Verify"}
@@ -56,6 +59,12 @@ const Verifycode = () => {
             className="font-semibold border rounded-xl flex items-center justify-center py-2 cursor-pointer"
           >
             Resend code
+          </Link>
+          <Link
+            to="/signin"
+            className="font-semibold border rounded-xl flex items-center justify-center py-2 cursor-pointer"
+          >
+            Sign in
           </Link>
         </form>
       </div>
