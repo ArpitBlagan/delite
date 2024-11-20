@@ -39,13 +39,14 @@ const Home = () => {
         <div className="bg-purple-900 h-[50px] flex items-center justify-between px-5">
           <p className="font-semibold text-2xl text-white">Dashboard</p>
           <button
+            disabled={loading}
             onClick={(e) => {
               e.preventDefault();
               handleLogout();
             }}
             className="bg-white text-purple-900 py-2 px-4 rounded-xl font-medium"
           >
-            Sign Out
+            {loading ? "Signing out" : "Sign Out"}
           </button>
         </div>
         <div className="flex-1">

@@ -7,12 +7,7 @@ import { useState } from "react";
 import { backendUrl } from "../contant";
 import axios from "axios";
 import { toast } from "sonner";
-import {
-  RiEye2Line,
-  RiEyeCloseFill,
-  RiEyeCloseLine,
-  RiEyeFill,
-} from "@remixicon/react";
+import { RiEyeCloseFill, RiEyeFill } from "@remixicon/react";
 const signupSchema = z
   .object({
     first_name: z.string().min(1, "Please provide your first_name."),
